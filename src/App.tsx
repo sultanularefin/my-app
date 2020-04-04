@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from "react";
 import Login from './components/Login';
 
 
@@ -7,6 +7,15 @@ import  app from 'firebase/app';
 
 // These imports load individual services into the firebase namespace.
 import auth from 'firebase/auth';
+
+
+
+import { Route, Switch, Router } from "react-router";
+import Fallback from "./fallback/Fallback";
+import routesDef from "./routes/Routes";
+import history from "./misc/History";
+
+
 
 
 const App: React.FC = () => {
@@ -29,9 +38,45 @@ const App: React.FC = () => {
   }
   firebase.initializeApp(config);
 
+  console.log('route: ','ss');
 
   return (
-      <Login />
+      <Router history={history}>
+        <>
+          <Switch>
+            {routesDef.map(route => {
+                  return (
+
+
+
+                      <Route
+                                    exact={route.exact}
+                                    key={route.path}
+                                    path={route.path}
+                                    render={(props: {}) => {
+                                        const ComposeComponent: any = route.component;
+                                        return (
+                                            <ComposeComponent {...props} />
+                                        )
+                                    }}
+                                />
+
+
+
+
+
+
+                  )
+
+              {/*<Route path="/">*/}
+              {/*  <Login />*/}
+              {/*</Route>*/}
+                }
+            )}
+            <Route component={Fallback} />
+          </Switch>
+        </>
+      </Router>
   );
 }
 
