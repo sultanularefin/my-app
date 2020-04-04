@@ -124,7 +124,7 @@ const Login = () => {
   }
 
 
-  const handleSignIn = () => {
+  const handleLogin = () => {
 
 
     let validate_Email =    false;
@@ -171,16 +171,7 @@ const Login = () => {
 
       else {
 
-        let UserCredential =  firebase.auth().createUserWithEmailAndPassword(username, password).
-        catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-
-          console.log('firebase error');
-          // ...
-        }).then(result=>{
-          firebase.auth().signInWithEmailAndPassword(username, password).catch(function(error) {
+        let UserCredential = firebase.auth().signInWithEmailAndPassword(username, password).catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
@@ -193,9 +184,7 @@ const Login = () => {
             history.push("/user");
             // return <SuccessFile/>
           });
-        });
-
-
+        };
 
 
         // let UserCredential = auth().createUserWithEmailAndPassword(emailState, passwordState);
@@ -205,7 +194,7 @@ const Login = () => {
 
       }
     }
-  }
+
 
 
   // validate email and password.
@@ -214,7 +203,7 @@ const Login = () => {
 
   const handleKeyPress = (e:any) => {
     if (e.keyCode === 13 || e.which === 13) {
-      isButtonDisabled || handleSignIn();
+      isButtonDisabled || handleLogin();
     }
   };
 
@@ -222,7 +211,7 @@ const Login = () => {
       <React.Fragment>
         <form className={classes.container} noValidate autoComplete="off">
           <Card className={classes.card}>
-            <CardHeader className={classes.header} title="Login App" />
+            <CardHeader className={classes.header} title="Arefin Test" />
             <CardContent>
               <div>
                 <TextField
@@ -230,8 +219,8 @@ const Login = () => {
                     fullWidth
                     id="username"
                     type="email"
-                    label="Username"
-                    placeholder="Username"
+                    label="Email"
+                    placeholder="your Email"
                     margin="normal"
                     onChange={(e)=>setUsername(e.target.value)}
                     onKeyPress={(e)=>handleKeyPress(e)}
@@ -256,9 +245,9 @@ const Login = () => {
                   size="large"
                   color="secondary"
                   className={classes.loginBtn}
-                  onClick={()=>handleSignIn()}
+                  onClick={()=>handleLogin()}
                   disabled={isButtonDisabled}>
-                Sign In
+                Login
               </Button>
             </CardActions>
 
@@ -270,7 +259,7 @@ const Login = () => {
                   className={classes.loginBtn}
                   onClick={() => history.push("/signup") }
                   disabled={isButtonDisabled}>
-                Already Have an Account
+                Don't Have an Account
               </Button>
             </CardActions>
 
