@@ -329,3 +329,16 @@ firebase.auth().createUserWithEmailAndPassword(username, password).
 
 
 ```
+
+
+```
+json
+
+credentials: 
+
+
+mhmdarefin@gmail.com ==> 123451235
+
+
+
+```
