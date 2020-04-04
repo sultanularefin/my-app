@@ -7,6 +7,16 @@ import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import CardHeader from '@material-ui/core/CardHeader';
 
+import SuccessFile from "./SuccessFile";
+
+import * as firebase from 'firebase';
+import app from 'firebase/app';
+
+// These imports load individual services into the firebase namespace.
+import auth from 'firebase/auth';
+import {sign} from "crypto";
+
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
@@ -47,15 +57,134 @@ const Login = () => {
     }
   }, [username, password]);
 
-  const handleLogin = () => {
-    if (username === 'abc@email.com' && password === 'password') {
-      setError(false);
-      setHelperText('Login Successfully');
-    } else {
-      setError(true);
-      setHelperText('Incorrect username or password')
+
+  const validate_Email_func=(email:string)=> {
+    console.log('email at validation email : ',email);
+
+    {
+      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
+      {
+        return (true)
+      }
+      // Alert.alert('You have entered an invalid email address!')
+      return false;
+
     }
-  };
+  }
+  const validate_Password_func=(password:string)=>{
+
+    if( !password || !typeof(password) || password === '' || password.length <6 ){
+      return false;
+    }
+
+    return true;
+  }
+
+  const validate_Password_match_func= (password:string,confPassword:string)=>{
+
+    if ((password  === confPassword) && (validate_Password_func(password)))
+
+    {
+      return true;
+    }
+
+    else {
+      return false;
+    }
+  }
+
+
+
+
+
+  const handleLogin = () => {
+
+
+    let validate_Email =    false;
+    let validate_password = false;
+    let validate_conf_password = false;
+
+    validate_Email = validate_Email_func(username) === false? false:true;
+    validate_password = validate_Password_func(password) === false? false:true;
+
+
+    if (validate_Email === false) {
+
+      console.log(
+          'Sorry, email format is incorrect.'
+      );
+
+
+      return;
+    }
+
+
+    else if (validate_password ===  false) {
+
+      // setLoadingState(false);
+      console.log(
+          'Password format is incorrect or Weak Password'     );
+      return;
+    }
+
+
+    else {
+      //default else
+      console.log('validate_Email: ', validate_Email);
+      console.log('validate_password: ', validate_password);
+
+      if ((!validate_Email)   && (!validate_password)) {
+
+        console.log(
+            'Validation error.'
+        );
+        return;
+
+      }
+
+
+      else {
+
+        let UserCredential =  firebase.auth().createUserWithEmailAndPassword(username, password).
+        catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+
+          console.log('firebase error');
+          // ...
+        }).then(result=>{
+          firebase.auth().signInWithEmailAndPassword(username, password).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // ...
+          }).then(signupSucess=>{
+
+            console.log('sign up success with firebase ');
+
+            console.log('signupSucess: ',signupSucess);
+
+            return <SuccessFile/>
+          });
+        });
+
+
+
+
+        // let UserCredential = auth().createUserWithEmailAndPassword(emailState, passwordState);
+
+
+
+
+      }
+    }
+  }
+
+
+  // validate email and password.
+
+
 
   const handleKeyPress = (e:any) => {
     if (e.keyCode === 13 || e.which === 13) {

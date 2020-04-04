@@ -1,17 +1,9 @@
-import React from 'react';
-import Login from './components/Login';
-
-
 import * as firebase from 'firebase';
 import  app from 'firebase/app';
 
 // These imports load individual services into the firebase namespace.
 import auth from 'firebase/auth';
-
-
-const App: React.FC = () => {
-
-  const config = {
+const config = {
     // apiKey: "ENTER YOURS HERE",
     // authDomain: "ENTER YOURS HERE",
     // databaseURL: "ENTER YOURS HERE",
@@ -26,16 +18,6 @@ const App: React.FC = () => {
     storageBucket: "test-project-fceb9.appspot.com",
     messagingSenderId: "1039528157635",
     appId: "1:1039528157635:web:64630ec3501398eb915d76"
-  }
-  firebase.initializeApp(config);
-
-
-  return (
-      <Login />
-  );
 }
-
-export default App;
-
-
+firebase.initializeApp(config);
 
